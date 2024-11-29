@@ -1,0 +1,324 @@
+DATA-PROCESSING/
+│
+├── config/
+│   └── config.env                # 環境設定用の設定ファイル
+│
+├── input/
+│   ├── spool.csv                 # 入力データファイル（CSV形式）
+│   
+├── logs/
+│   └── process.log               # データ処理のログファイル
+│
+├── output/
+│   ├── categorized_data.csv      # カテゴリ別データの出力ファイル
+│   ├── formatting_amount_.csv    # 金額フォーマット処理後のファイル
+│   ├── normalized_data.csv       # 正規化されたデータの出力
+│   ├── preprocessed_data.csv     # 前処理済みデータの出力
+│   └── sorted_unique_data.csv    # ソートされたユニークデータの出力
+│
+├── scripts/
+│   ├── a.csh                     # シェルスクリプト 'a.csh'
+│   ├── add_category.awk          # カテゴリを追加するAWKスクリプト
+│   ├── db_credentials.txt        # データベース認証情報
+│   ├── exit_with_error.csh       # エラーで終了するシェルスクリプト
+│   ├── final.bad                 # エラーが発生した場合のログファイル
+│   ├── final.csv                 # 最終的な出力CSVファイル
+│   ├── format_amount.awk         # 金額フォーマット用AWKスクリプト
+│   ├── log_message.csh           # ログメッセージを処理するシェルスクリプト
+│   ├── main_process.csh          # メインのデータ処理シェルスクリプト
+│   ├── normalize.awk             # データ正規化用AWKスクリプト
+│   ├── preprocess.awk            # データ前処理用AWKスクリプト
+│   ├── work.ctl                  # 処理のための制御ファイル
+│   ├── work.log                  # 処理のためのログファイル
+│   └── (その他のシェルスクリプトやAWKスクリプト)
+│
+
+
+#   CREATE TABLE NEW_PRODUCTS (
+#     id NUMBER,
+#     product_id NUMBER,
+#     product_name VARCHAR2(10),
+#     amount VARCHAR2(10),
+#     dates DATE,
+#     category VARCHAR2(10)
+# );
+
+
+# #   CREATE TABLE products (
+# #     id NUMBER,
+# #     product_id NUMBER,
+# #     product_name VARCHAR2(12),
+# #     amount NUMBER,
+# #     dates varchar2(10)
+# # );
+
+
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (1, 1, 'ProdA', 150.75, '2024-11-22');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (1, 1, 'ProdA', 150.75, '2024-11-22');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (1, 1, 'ProdA', 150.75, '2024-11-22');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (1, 1, 'ProdA', 150.75, '2024-11-22');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (1, 1, 'ProdA', 150.75, '2024-11-22');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (1, 1, 'ProdA', 150.75, '2024-11-22');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (1, 1, 'ProdA', 150.75, '2024-11-22');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (1, 1, 'ProdA', 150.75, '2024-11-22');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (1, 1, 'ProdA', 150.75, '2024-11-22');
+
+
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES    
+# #     (2, 2, 'ProdB', 200.50, '2021-12-21');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (3, 3, 'ProdC*', 350.25, '2000-08-20');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (4, 4, 'ProdD-', 50.25, '1999*08*23');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (6, 6, 'Prod FLE', 225.60, '1994/11/18');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (7, 7, 'Prod SEW', 10.60, '1991/01/18');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (8, 8, 'Prod EF', 101.60, '1994/11/18');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (9, 9, 'Prod BF', 99.60, '1990/09/28');
+# # INSERT INTO products (id, product_id, product_name, amount, dates)
+# # VALUES
+# #     (10, 10, 'Prod Z', 72.60, '1992/12/24');
+
+
+# CREATE TABLE new_products (
+#     ID           NUMBER,
+#     PRODUCT_ID   NUMBER,
+#     PRODUCT_NAME VARCHAR2(10),
+#     AMOUNT       NUMBER(10, 4),  -- 10 digits in total, 4 digits after the decimal
+#     DATES        DATE,
+#     CATEGORY     VARCHAR2(10)
+# );
+
+
+("set pagesize 10")
+
+SQL> select * from products;
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         2,         2,ProdB       ,     200.5,2021-12-21                        
+         3,         3,ProdC*      ,    350.25,2000-08-20                        
+         4,         4,ProdD-      ,     50.25,1999*08*23                        
+         5,         5,ProdE       ,     225.6,1994/11/18                        
+         6,         6,Prod FLE    ,     225.6,1994/11/18                        
+         7,         7,Prod SEW    ,      10.6,1991/01/18                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         8,         8,Prod EF     ,     101.6,1994/11/18                        
+         9,         9,Prod BF     ,      99.6,1990/09/28                        
+        10,        10,Prod Z      ,      72.6,1992/12/24                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+        ID,PRODUCT_ID,PRODUCT_NAME,    AMOUNT,DATES                             
+----------,----------,------------,----------,----------                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+         1,         1,ProdA       ,    150.75,2024-11-22                        
+
+137 rows selected.
+
+SQL> spool off;

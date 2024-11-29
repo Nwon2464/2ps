@@ -1,0 +1,53 @@
+
+SQL*Loader: Release 21.0.0.0.0 - Production on Wed Nov 27 14:18:28 2024
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle and/or its affiliates.  All rights reserved.
+
+Control File:   work.ctl
+Data File:      final.csv
+  Bad File:     final.bad
+  Discard File:  none specified
+ 
+ (Allow all discards)
+
+Number to load: ALL
+Number to skip: 0
+Errors allowed: 50
+Bind array:     250 rows, maximum of 1048576 bytes
+Continuation:    none specified
+Path used:      Conventional
+
+Table NEW_PRODUCTS, loaded from every logical record.
+Insert option in effect for this table: INSERT
+
+   Column Name                  Position   Len  Term Encl Datatype
+------------------------------ ---------- ----- ---- ---- ---------------------
+ID                                  FIRST     *   ,  O(") CHARACTER            
+PRODUCT_ID                           NEXT     *   ,  O(") CHARACTER            
+PRODUCT_NAME                         NEXT     *   ,  O(") CHARACTER            
+AMOUNT                               NEXT     *   ,  O(") CHARACTER            
+DATES                                NEXT     *   ,  O(") CHARACTER            
+CATEGORY                             NEXT     *   ,  O(") CHARACTER            
+
+
+Table NEW_PRODUCTS:
+  100000 Rows successfully loaded.
+  0 Rows not loaded due to data errors.
+  0 Rows not loaded because all WHEN clauses were failed.
+  0 Rows not loaded because all fields were null.
+
+
+Space allocated for bind array:                 387000 bytes(250 rows)
+Read   buffer bytes: 1048576
+
+Total logical records skipped:          0
+Total logical records read:        100000
+Total logical records rejected:         0
+Total logical records discarded:        0
+
+Run began on Wed Nov 27 14:18:28 2024
+Run ended on Wed Nov 27 14:18:32 2024
+
+Elapsed time was:     00:00:04.11
+CPU time was:         00:00:00.50
